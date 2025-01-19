@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://127.0.0.1:5000'; // URL of the Flask backend
+  private baseUrl = 'http://192.168.28.177:5000'; // URL of the Flask backend
+  private ardUrl = 'http://192.168.28.140'; // arduino-ip-address
 
   constructor(private http: HttpClient) {}
 
@@ -40,7 +41,7 @@ export class ApiService {
   // Get all lamps in a room
   getLamps(buildingId: number, roomId: number): Observable<any> {
     return this.http.get(
-      `${this.baseUrl}/buildings/${buildingId}/rooms/${roomId}/lamps`
+      `${this.baseUrl}/buildings/${buildingId}/rooms/${roomId}`
     );
   }
 
@@ -54,5 +55,38 @@ export class ApiService {
       `${this.baseUrl}/buildings/${buildingId}/rooms/${roomId}/lamps`,
       { name: lampName }
     );
+  }
+
+
+  // Turn on or off the automatique mode 
+  setMode(mode: string): Observable<any> {
+    const url = `${this.ardUrl}/setMode`;
+    const body = new URLSearchParams();
+    body.set('mode', mode);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded',
+    });
+
+    return this.http.post(url, body.toString(), { headers });
+  }
+
+  getMode(): Observable<any> {
+    const url = `${this.ardUrl}/getMode`; 
+    return this.http.get(url);
+  }
+
+  setBright(value: number): Observable<any> {
+    const url = `${this.ardUrl}/setBrightness`;
+    const body = new URLSearchParams();
+  
+    // Convert the number to a string
+    body.set('value', value.toString());
+  
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded',
+    });
+  
+    return this.http.post(url, body.toString(), { headers });
   }
 }

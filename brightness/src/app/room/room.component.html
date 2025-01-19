@@ -2,7 +2,7 @@
 
 
 
-  <div class="py-12 px-3 bg-white border-gray-200 dark:bg-gray-900">
+  <div class="py-12 px-3 bg-white border-gray-200 dark:bg-gray-900 h-screen">
   
     <form (submit)="addLamp(buildingId!,roomId!, newLampName)" class="max-w-sm mx-auto">
       <div class="mb-5">
@@ -15,7 +15,40 @@
   
     <div class="py-12 px-3 bg-white border-gray-200 dark:bg-gray-900 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
       <a *ngFor="let lamp of lamps" class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-          <h5 [routerLink]="['/lamp', buildingId, roomId]"  class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ lamp.name }}</h5>
+          <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{ lamp.name }}</h5>
+          <label class="inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              class="sr-only peer"
+              [(ngModel)]="autoMode"
+              (change)="toggleMode()"
+            />
+            <div
+              class="relative w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+            ></div>
+            <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">
+              Current Mode: {{ autoMode ? 'Automatic' : 'Manual' }}
+            </span>
+          </label>
+
+          <label for="brightness-range" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            Adjust Brightness
+          </label>
+          <input
+            id="brightness-range"
+            type="range"
+            [value]="brightness"
+            [disabled]="autoMode" 
+            (change)="updateBrightness($event)"
+            class="w-full h-1 mb-6 bg-gray-200 rounded-lg appearance-none cursor-pointer range-sm dark:bg-gray-700"
+          >
+          <p class="text-sm text-gray-700 dark:text-gray-300">
+            Current Brightness: {{ brightness }}
+          </p>
+          <p *ngIf="autoMode" class="text-sm text-red-500">
+            Manual mode is not active. Switch to manual mode to adjust brightness.
+          </p>
+          
       </a>
     </div>
     
