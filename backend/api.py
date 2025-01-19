@@ -71,6 +71,7 @@ def add_lamp(building_id, room_id):
 def get_buildings():
     return jsonify(data["buildings"]), 200
 
+
 @app.route("/buildings/<int:building_id>", methods=["GET"])
 def get_building(building_id):
     building = find_building(building_id)

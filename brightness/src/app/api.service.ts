@@ -15,6 +15,11 @@ export class ApiService {
     return this.http.get<any[]>(`${this.baseUrl}/buildings`);
   }
 
+  // Get all buildings
+  getBuilding(buildingId: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/buildings/${buildingId}`);
+  }
+
   // Add a building
   addBuilding(buildingName: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/buildings`, { name: buildingName });
